@@ -4,6 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace jautomulti.Data {
     public class ApplicationDbContext : IdentityDbContext {
+
+        /// <summary>
+        /// Apresenta a Base de dados do projeto
+        /// </summary>
+        /// <param name="options"></param>
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) {
         }
