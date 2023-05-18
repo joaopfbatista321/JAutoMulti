@@ -5,6 +5,8 @@ namespace jautomulti.Models {
 
         public Carros() {
             ListaFotografias = new HashSet<Fotografias>();
+            ListaReparacoes = new HashSet<Reparacoes>();
+       
         }
 
         public int Id { get; set; }
@@ -17,21 +19,22 @@ namespace jautomulti.Models {
         /// <summary>
         /// Data de matricula 
         /// </summary>
-        public DateTime DataMatricula { get; set; }
+        public DateTime? DataMatricula { get; set; }
 
         /// <summary>
         /// Data de compra do veiculo 
         /// </summary>
-        public DateTime DataCompra { get; set; }
+        public DateTime? DataCompra { get; set; }
 
         /// <summary>
-        /// sexo do animal: 
+        /// Tipo do carro:
         /// C-Citadino
         /// S-Sedan
         /// T-Carrinha
         /// TT-Todo o terreno
         /// Suv- Jipe citadino 
         /// </summary>
+        ///     
         public string Tipo { get; set; }
 
         /// <summary>
@@ -39,17 +42,18 @@ namespace jautomulti.Models {
         /// </summary>
         public string Matricula { get; set; }
 
+        public string Marca { get; set; }
+
+        public string Modelo{ get; set; }
+
+        public string Cor { get; set; }
+
         /* ++++++++++++++++++++++++++++++++++++++++++ 
          * Criação das chaves forasteiras
          * ++++++++++++++++++++++++++++++++++++++++++ 
          */
 
-        /// <summary>
-        /// FK para o Mecanico do carro
-        /// </summary>
-        [ForeignKey(nameof(Mecanico))]
-        public int MecanicoFK { get; set; }
-        public Mecanicos Mecanico { get; set; } // efetivamente, esta é q é a FK, para a EF
+
         /*
          * o uso de [anotadores] serve para formatar o comportamento
          * dos 'objetos' por ele referenciados
@@ -59,17 +63,20 @@ namespace jautomulti.Models {
          *    - classes
          * */
 
-        /// <summary>
-        /// FK do Carro para a sua Marca
-        /// </summary>
-        [ForeignKey(nameof(Marca))]
-        public int MarcaFK { get; set; }
-        public Marcas Marca { get; set; }
+
+
+        [ForeignKey(nameof(Proprietario))]
+        public int ProprietarioFK { get; set; }
+        public Proprietarios Proprietario{ get; set; }
 
         /// <summary>
         /// Lista das Fotografias associadas ao carro
         /// </summary>
         public ICollection<Fotografias> ListaFotografias { get; set; }
+
+        public ICollection<Reparacoes> ListaReparacoes { get; set;}
+
+      
 
 
     }

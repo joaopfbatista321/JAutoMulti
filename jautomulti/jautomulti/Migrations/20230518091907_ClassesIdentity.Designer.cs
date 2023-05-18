@@ -11,8 +11,8 @@ using jautomulti.Data;
 namespace jautomulti.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230506180836_CriacaoModelo")]
-    partial class CriacaoModelo
+    [Migration("20230518091907_ClassesIdentity")]
+    partial class ClassesIdentity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,21 +21,6 @@ namespace jautomulti.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
-
-            modelBuilder.Entity("MarcasMecanicos", b =>
-                {
-                    b.Property<int>("ListaMarcasId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ListaMecanicosId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ListaMarcasId", "ListaMecanicosId");
-
-                    b.HasIndex("ListaMecanicosId");
-
-                    b.ToTable("MarcasMecanicos");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -233,133 +218,6 @@ namespace jautomulti.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("jautomulti.Models.Carros", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DataCompra")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("DataMatricula")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("MarcaFK")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Matricula")
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("MecanicoFK")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Tipo")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("VIN")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MarcaFK");
-
-                    b.HasIndex("MecanicoFK");
-
-                    b.ToTable("Carros");
-                });
-
-            modelBuilder.Entity("jautomulti.Models.Fotografias", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("CarroFK")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DataFotografia")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Local")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("NomeFicheiro")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CarroFK");
-
-                    b.ToTable("Fotografias");
-                });
-
-            modelBuilder.Entity("jautomulti.Models.Marcas", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Nome")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Marcas");
-                });
-
-            modelBuilder.Entity("jautomulti.Models.Mecanicos", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Alcunha")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("CodPostal")
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Morada")
-                        .HasMaxLength(60)
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("Telemovel")
-                        .IsRequired()
-                        .HasMaxLength(9)
-                        .HasColumnType("varchar(9)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Mecanics");
-                });
-
-            modelBuilder.Entity("MarcasMecanicos", b =>
-                {
-                    b.HasOne("jautomulti.Models.Marcas", null)
-                        .WithMany()
-                        .HasForeignKey("ListaMarcasId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("jautomulti.Models.Mecanicos", null)
-                        .WithMany()
-                        .HasForeignKey("ListaMecanicosId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -409,51 +267,6 @@ namespace jautomulti.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("jautomulti.Models.Carros", b =>
-                {
-                    b.HasOne("jautomulti.Models.Marcas", "Marca")
-                        .WithMany("ListaCarros")
-                        .HasForeignKey("MarcaFK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("jautomulti.Models.Mecanicos", "Mecanico")
-                        .WithMany("ListaCarros")
-                        .HasForeignKey("MecanicoFK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Marca");
-
-                    b.Navigation("Mecanico");
-                });
-
-            modelBuilder.Entity("jautomulti.Models.Fotografias", b =>
-                {
-                    b.HasOne("jautomulti.Models.Carros", "Carro")
-                        .WithMany("ListaFotografias")
-                        .HasForeignKey("CarroFK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Carro");
-                });
-
-            modelBuilder.Entity("jautomulti.Models.Carros", b =>
-                {
-                    b.Navigation("ListaFotografias");
-                });
-
-            modelBuilder.Entity("jautomulti.Models.Marcas", b =>
-                {
-                    b.Navigation("ListaCarros");
-                });
-
-            modelBuilder.Entity("jautomulti.Models.Mecanicos", b =>
-                {
-                    b.Navigation("ListaCarros");
                 });
 #pragma warning restore 612, 618
         }

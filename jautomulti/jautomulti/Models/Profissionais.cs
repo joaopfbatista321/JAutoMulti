@@ -1,13 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace jautomulti.Models {
-    public class Mecanicos {
+    public class Profissionais {
 
-        public Mecanicos() {
+        public Profissionais() {
+            ListaReparacoes = new HashSet<Reparacoes>();
             // inicializar a lista de Carros do Mecanico
-            ListaCarros = new HashSet<Carros>();
+            //ListaCarros = new HashSet<Carros>();
             // inicializar a lista de Raças que o Criador cria
-            ListaMarcas = new HashSet<Marcas>();
+            //ListaMarcas = new HashSet<Marcas>();
         }
 
 
@@ -69,19 +71,26 @@ namespace jautomulti.Models {
         [RegularExpression("9[1236][0-9]{7}")] // exemplo com indicativo internacional: ((+|00)[0-9]{2,5})?[0-9]{5,9}
         public string Telemovel { get; set; }
 
+        /// <summary>
+        /// especialidade do mecânico (mecânico geral, eletricista auto, pintura, etc.)
+        /// </summary>
+        public string Especializacao { get; set; }
+
         /* ++++++++++++++++++++++++++++++++++++++++++++++++
-         * relacionamentos associados ao Criador
+         * relacionamentos associados ao Mecanico
+         */
+        /*
+           [ForeignKey(nameof(Reparacoes))]
+           public int ReparacaoFK { get; set; }
+           public Reparacoes Reparacao { get; set; }
+
          */
 
         /// <summary>
-        /// Lista dos Carros associados ao Mecanico
+        /// Lista das Reparações associadas ao Mecanico
         /// </summary>
-        public ICollection<Carros> ListaCarros { get; set; }
-
-        /// <summary>
-        /// Lista das raças que um Criador cria
-        /// </summary>
-        public ICollection<Marcas> ListaMarcas { get; set; }
+        public ICollection<Reparacoes> ListaReparacoes { get; set; }
+        
 
     }
 }

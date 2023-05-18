@@ -7,7 +7,7 @@ using MySql.EntityFrameworkCore.Metadata;
 namespace jautomulti.Migrations
 {
     /// <inheritdoc />
-    public partial class Autenticacao : Migration
+    public partial class ClassesIdentity : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
