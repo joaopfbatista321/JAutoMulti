@@ -74,6 +74,9 @@ namespace jautomulti.Models {
         /// </summary>
         public ICollection<Fotografias> ListaFotografias { get; set; }
 
+        /// <summary>
+        /// Lista das reparações associadas ao carro
+        /// </summary>
         public ICollection<Reparacoes> ListaReparacoes { get; set;}
 
       

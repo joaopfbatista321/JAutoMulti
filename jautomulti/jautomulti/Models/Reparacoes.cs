@@ -14,10 +14,11 @@ namespace jautomulti.Models {
         /// <summary>
         /// Data de início da reperação
         /// </summary>
+        [Display(Name = "Data do Inicio da Reparação")]
         public DateTime DataInicio { get; set; }
-
+        [Display(Name = "Data do Fim da Reparação")]
         public DateTime DataFim { get; set; }
-
+        [Display(Name = "Observações")]
         public string Observacoes { get; set; }
 
         /// <summary>
@@ -33,8 +34,8 @@ namespace jautomulti.Models {
         public decimal Preco { get; set; }
 
 
-
-        [ForeignKey(nameof(Carros))]
+        [Display(Name = "Carros")]
+        [ForeignKey(nameof(Carro))]
         public int CarroFK { get; set; }
         public Carros Carro { get; set; }
 
