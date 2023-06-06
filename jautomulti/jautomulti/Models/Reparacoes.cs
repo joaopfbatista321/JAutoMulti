@@ -44,7 +44,10 @@ namespace jautomulti.Models {
         //public int MecanicoFK { get; set; }
         //public Mecanicos Mecanico { get; set; }
 
+      
         public ICollection<Profissionais> ListaProfissionaisNaReparacao { get; set; }
+      
+
 
     }
 }

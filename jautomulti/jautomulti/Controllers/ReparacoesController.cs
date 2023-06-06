@@ -48,6 +48,7 @@ namespace jautomulti.Controllers
         // GET: Reparacoes/Create
         public IActionResult Create()
         {
+
             ViewData["CarroFK"] = new SelectList(_context.Carros, "Id", "Matricula");
             ViewData["ListaProfissionaisNaReparacao"] = new SelectList(_context.Profissionais, "Id", "Nome");
             return View();

@@ -17,4 +17,24 @@
         public string Fotografia { get; set; }
         public string Proprietario { get; set; }
     }
+
+    public class ProprietariosViewModel
+    {
+        public int Id { get; set; }
+
+        public string Nome { get; set; }
+
+        public string Sexo { get; set; }
+
+
+        public string Telemovel { get; set; }
+
+
+        public string Email { get; set; }
+
+        public string NIF { get; set; }
+
+        ICollection<CarrosViewModel> Carros { get; set; }
+    }
+
 }

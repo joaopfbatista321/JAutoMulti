@@ -18,8 +18,8 @@ namespace jautomulti.Controllers.API
 
 
 
-            // GET: api/CarrosApi
-            [HttpGet]
+        // GET: api/CarrosApi
+        [HttpGet]
             public async Task<ActionResult<IEnumerable<CarrosViewModel>>> GetCarros()
             {
                 return await _context.Carros
@@ -40,8 +40,8 @@ namespace jautomulti.Controllers.API
 
 
 
-            // GET: api/CarrosAPI/5
-            [HttpGet("{id}")]
+        // GET: api/CarrosApi/5
+        [HttpGet("{id}")]
             public async Task<ActionResult<Carros>> GetCarros(int id)
             {
                 var carros = await _context.Carros.FindAsync(id);
@@ -56,9 +56,9 @@ namespace jautomulti.Controllers.API
 
 
 
-            // PUT: api/CarrosAPI/5
-            // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-            [HttpPut("{id}")]
+        // PUT: api/CarrosApi/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
             public async Task<IActionResult> PutCarros(int id, Carros carros)
             {
                 if (id != carros.Id)
@@ -90,10 +90,10 @@ namespace jautomulti.Controllers.API
 
 
 
-            // POST: api/CarrosAPI
-            // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-            [HttpPost]
-            public async Task<ActionResult<Carros>> PostAnimais([FromForm] Carros carro, IFormFile uploadFotoCarro)
+        // POST: api/CarrosApi
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+            public async Task<ActionResult<Carros>> PostCarros([FromForm] Carros carro, IFormFile uploadFotoCarro)
             {
 
                 // o anotador [FromForm] informa o ASP .NET que os dados são fornecidos 
@@ -123,14 +123,14 @@ namespace jautomulti.Controllers.API
                 }
 
 
-                return CreatedAtAction("GetAnimais", new { id = carro.Id }, carro);
+                return CreatedAtAction("GetCarros", new { id = carro.Id }, carro);
             }
 
 
 
 
-            // DELETE: api/AnimaisAPI/5
-            [HttpDelete("{id}")]
+        // DELETE: api/CarrosApi/5
+        [HttpDelete("{id}")]
             public async Task<IActionResult> DeleteCarros(int id)
             {
                 var carros = await _context.Carros.FindAsync(id);
