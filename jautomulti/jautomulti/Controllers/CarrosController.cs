@@ -19,6 +19,8 @@ namespace jautomulti.Controllers
             _context = context;
         }
 
+     
+
         // GET: Carros
         public async Task<IActionResult> Index()
         {
@@ -37,6 +39,22 @@ namespace jautomulti.Controllers
             var carros = await _context.Carros
                 .Include(c => c.Proprietario)
                 .FirstOrDefaultAsync(m => m.Id == id);
+            if (carros == null)
+            {
+                return NotFound();
+            }
+
+
+            if (id == null || _context.Carros == null)
+            {
+                return NotFound();
+            }
+
+            var carro = await _context.Carros
+                .Include(c => c.Proprietario)
+                .Include(c => c.ListaReparacoes) // Inclui as reparações associadas ao carro
+                .FirstOrDefaultAsync(m => m.Id == id);
+
             if (carros == null)
             {
                 return NotFound();

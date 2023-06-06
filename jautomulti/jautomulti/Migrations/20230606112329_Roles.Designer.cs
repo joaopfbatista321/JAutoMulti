@@ -11,8 +11,8 @@ using jautomulti.Data;
 namespace jautomulti.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230518091956_Modelo")]
-    partial class Modelo
+    [Migration("20230606112329_Roles")]
+    partial class Roles
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,6 +46,26 @@ namespace jautomulti.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "adm",
+                            Name = "Admin",
+                            NormalizedName = "ADMINISTRADOR"
+                        },
+                        new
+                        {
+                            Id = "prof",
+                            Name = "Profissional",
+                            NormalizedName = "PROFISSIONAL"
+                        },
+                        new
+                        {
+                            Id = "cli",
+                            Name = "Cliente",
+                            NormalizedName = "CLIENTE"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -133,6 +153,24 @@ namespace jautomulti.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "251bbc7e-7737-4366-826a-0d72ddae97d6",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "b26758cc-0fda-430f-a327-50e0b487f5f7",
+                            Email = "joaopfbatista@gmail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "JOAOPFBATISTA@GMAIL.COM",
+                            NormalizedUserName = "JOAOPFBATISTA@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEH0Lu2Pj8XRBiCxzrkIiuYFLG/c/G+LDb6jV6/vf71wDt5x2WKQktYeVUkj/eBG43g==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "3c81662c-4e9d-4866-9f5e-e6e9f05fd4b6",
+                            TwoFactorEnabled = false,
+                            UserName = "joaopfbatista@gmail.com"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -350,7 +388,10 @@ namespace jautomulti.Migrations
                     b.Property<string>("NIF")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Nome")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Sexo")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Telemovel")
@@ -370,9 +411,6 @@ namespace jautomulti.Migrations
                     b.Property<int>("CarroFK")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CarroId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("DataFim")
                         .HasColumnType("datetime(6)");
 
@@ -387,7 +425,7 @@ namespace jautomulti.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CarroId");
+                    b.HasIndex("CarroFK");
 
                     b.ToTable("Reparacoes");
                 });
@@ -472,7 +510,7 @@ namespace jautomulti.Migrations
             modelBuilder.Entity("jautomulti.Models.Fotografias", b =>
                 {
                     b.HasOne("jautomulti.Models.Carros", "Carro")
-                        .WithMany("ListaFotografias")
+                        .WithMany("Fotografia")
                         .HasForeignKey("CarroFK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -484,14 +522,16 @@ namespace jautomulti.Migrations
                 {
                     b.HasOne("jautomulti.Models.Carros", "Carro")
                         .WithMany("ListaReparacoes")
-                        .HasForeignKey("CarroId");
+                        .HasForeignKey("CarroFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Carro");
                 });
 
             modelBuilder.Entity("jautomulti.Models.Carros", b =>
                 {
-                    b.Navigation("ListaFotografias");
+                    b.Navigation("Fotografia");
 
                     b.Navigation("ListaReparacoes");
                 });

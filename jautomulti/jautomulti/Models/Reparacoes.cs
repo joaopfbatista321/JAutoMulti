@@ -28,9 +28,10 @@ namespace jautomulti.Models {
         [Required]
         // tem de introduzir um valor de 0 a 9 de 1 a 8 algarismos, podendo conter um valor com duas casas decimais
         [RegularExpression("[0-9]{1,8}[,.]?[0-9]{0,2}", ErrorMessage = "Tem de introduzir o Preço da Marcação")] // tem de introduzir um valor de 
-        [Display(Name = "Preço")]
+        
         public string AuxPreco { get; set; }
-
+       
+        [Display(Name = "Preço")]
         public decimal Preco { get; set; }
 
 

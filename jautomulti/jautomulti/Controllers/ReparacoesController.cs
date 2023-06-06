@@ -48,7 +48,8 @@ namespace jautomulti.Controllers
         // GET: Reparacoes/Create
         public IActionResult Create()
         {
-            ViewData["CarroFK"] = new SelectList(_context.Carros, "Id", "Id");
+            ViewData["CarroFK"] = new SelectList(_context.Carros, "Id", "Matricula");
+            ViewData["ListaProfissionaisNaReparacao"] = new SelectList(_context.Profissionais, "Id", "Nome");
             return View();
         }
 
@@ -57,7 +58,7 @@ namespace jautomulti.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,DataInicio,DataFim,Observacoes,Preco,CarroFK")] Reparacoes reparacoes)
+        public async Task<IActionResult> Create([Bind("Id,DataInicio,DataFim,Observacoes,Preco,CarroFK,ListaProfissionaisNaReparacao")] Reparacoes reparacoes)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +66,8 @@ namespace jautomulti.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CarroFK"] = new SelectList(_context.Carros, "Id", "Id", reparacoes.CarroFK);
+            ViewData["CarroFK"] = new SelectList(_context.Carros, "Id", "Matricula", reparacoes.CarroFK);
+            ViewData["ListaProfissionaisNaReparacao"] = new SelectList(_context.Profissionais, "Id", "Nome", reparacoes.ListaProfissionaisNaReparacao);
             return View(reparacoes);
         }
 
@@ -82,7 +84,8 @@ namespace jautomulti.Controllers
             {
                 return NotFound();
             }
-            ViewData["CarroFK"] = new SelectList(_context.Carros, "Id", "Id", reparacoes.CarroFK);
+            ViewData["CarroFK"] = new SelectList(_context.Carros, "Id", "Matricula", reparacoes.CarroFK);
+            ViewData["ListaProfissionaisNaReparacao"] = new SelectList(_context.Profissionais, "Id", "Nome", reparacoes.ListaProfissionaisNaReparacao);
             return View(reparacoes);
         }
 
@@ -91,7 +94,7 @@ namespace jautomulti.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,DataInicio,DataFim,Observacoes,Preco,CarroFK")] Reparacoes reparacoes)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,DataInicio,DataFim,Observacoes,Preco,CarroFK,ListaProfissionaisNaReparacao")] Reparacoes reparacoes)
         {
             if (id != reparacoes.Id)
             {
@@ -118,7 +121,8 @@ namespace jautomulti.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CarroFK"] = new SelectList(_context.Carros, "Id", "Id", reparacoes.CarroFK);
+            ViewData["CarroFK"] = new SelectList(_context.Carros, "Id", "Matricula", reparacoes.CarroFK);
+            ViewData["ListaProfissionaisNaReparacao"] = new SelectList(_context.Profissionais, "Id", "Nome", reparacoes.ListaProfissionaisNaReparacao);
             return View(reparacoes);
         }
 

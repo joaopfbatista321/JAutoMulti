@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using jautomulti.Data;
 
@@ -10,9 +11,11 @@ using jautomulti.Data;
 namespace jautomulti.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230606113033_Dados")]
+    partial class Dados
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,17 +157,17 @@ namespace jautomulti.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e48629eb-cbf6-4edc-9cee-ffe31b042104",
+                            Id = "3e956114-2d9a-4884-b46f-949b1763e91d",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3182f07e-98fb-4ca6-aa3e-a841c5e81703",
+                            ConcurrencyStamp = "e676fab8-84c3-44c4-8772-0522466eecf0",
                             Email = "joaopfbatista@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "JOAOPFBATISTA@GMAIL.COM",
                             NormalizedUserName = "JOAOPFBATISTA@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEG4ob8OPZKhxQSg94HdUxprutMIvi4rKmg8evFEAzee5QKGL1idugoakythCixgIzw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENQofJuWN0CCnk8MF+cIpi/Y/r+vu2GSe88qsN4hjYjft7/prQaJAv4g1VOG482hJw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "d60e4a2e-24d8-4d7c-a452-7e2658ea756f",
+                            SecurityStamp = "4b921ddc-96e3-40db-9c40-6f3d51ede1d2",
                             TwoFactorEnabled = false,
                             UserName = "joaopfbatista@gmail.com"
                         });
@@ -428,38 +431,30 @@ namespace jautomulti.Migrations
                         new
                         {
                             Id = 1,
-                            Email = "Luis@gmail.com",
                             NIF = "813635582",
                             Nome = "Luís Freitas",
-                            Sexo = "M",
-                            Telemovel = "123456789"
+                            Sexo = "M"
                         },
                         new
                         {
                             Id = 2,
-                            Email = "As@gmail.com",
                             NIF = "854613462",
                             Nome = "Andreia Gomes",
-                            Sexo = "F",
-                            Telemovel = "123456789"
+                            Sexo = "F"
                         },
                         new
                         {
                             Id = 3,
-                            Email = "Cris@gmail.com",
                             NIF = "265368715",
                             Nome = "Cristina Sousa",
-                            Sexo = "F",
-                            Telemovel = "123456789"
+                            Sexo = "F"
                         },
                         new
                         {
                             Id = 4,
-                            Email = "so@gmail.com",
                             NIF = "835623190",
                             Nome = "Sónia Rosa",
-                            Sexo = "F",
-                            Telemovel = "123456789"
+                            Sexo = "F"
                         });
                 });
 
