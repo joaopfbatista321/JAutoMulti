@@ -7,22 +7,61 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using jautomulti.Data;
 using jautomulti.Models;
+using jautomulti.Migrations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace jautomulti.Controllers
 {
+    /* [Authorize(Roles = "Profissional")]  -->  apenas os utilizadores deste tipo
+*                                          têm acesso
+*                                          
+* [Authorize(Roles = "Profissional,Admin")]  --> utilizadores dos tipos
+*                                                        Profissional
+*                                                        OU
+*                                                        Administrativo
+*                                                        têm acesso às funcionalidades
+*
+* [Authorize(Roles = "Profissional")]
+* [Authorize(Roles = "Admin")]  --> têm acessos os utilizadores dos perfis
+*                                            Profissional
+*                                            E
+*                                            Administrativo
+*/
+   // [Authorize(Roles = "Profissional,Admin")]
     public class ProfissionaisController : Controller
     {
+    
+
+
+        /// <summary>
+        /// cria uma instancia de acesso à Base de Dados
+        /// </summary>
         private readonly ApplicationDbContext _context;
 
-        public ProfissionaisController(ApplicationDbContext context)
+        /// <summary>
+        /// esta variável vai conter os dados do servidor
+        /// </summary>
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+
+        public ProfissionaisController(ApplicationDbContext context,
+         IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: Profissionais
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-              return View(await _context.Profissionais.ToListAsync());
+            /* acesso à base de dados
+        * SELECT *
+        * FROM Proprietarios
+        * 
+        * e, depois estamos a enviar os dados para a View
+        */
+            return View(await _context.Profissionais.ToListAsync());
         }
 
         // GET: Profissionais/Details/5
@@ -44,6 +83,10 @@ namespace jautomulti.Controllers
         }
 
         // GET: Profissionais/Create
+        /// <summary>
+        /// usado para o primeiro acesso à View 'Create', em modo HTTP GET
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Create()
         {
             return View();
@@ -52,6 +95,12 @@ namespace jautomulti.Controllers
         // POST: Profissionais/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// método usado para recuperar os dados enviados pelos utilizadores, 
+        /// do Browser para o servidor
+        /// </summary>
+        /// <param name="profissionais"></param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Nome,Alcunha,Morada,CodPostal,Email,Telemovel,Especializacao")] Profissionais profissionais)

@@ -74,11 +74,13 @@
         <dt class="col-sm-2">
             @Html.DisplayName("Repações do Veiculo")
         </dt>
+    
         <dd class="col-sm-10">
             <ul>
+                 
                 @foreach (var reparacao in Model.ListaReparacoes)
                 {
-                    <li>@reparacao.DataInicio - @reparacao.DataFim - @reparacao.Preco</li>
+                    <li>@reparacao.DataInicio - @reparacao.DataFim - @reparacao.Preco - </li>
                 }
             </ul>
         </dd>

@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using jautomulti.Data;
 using jautomulti.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace jautomulti.Controllers
 {
+    [Authorize]
     public class ProprietariosController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -25,19 +27,23 @@ namespace jautomulti.Controllers
               return View(await _context.Proprietarios.ToListAsync());
         }
 
+
+
         // GET: Proprietarios/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Proprietarios == null)
+            if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("Index");
             }
 
             var proprietarios = await _context.Proprietarios
+                .Include(d => d.ListaCarros)
+                .Where(d => d.Id == id)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (proprietarios == null)
             {
-                return NotFound();
+                return RedirectToAction("Index");
             }
 
             return View(proprietarios);
@@ -54,7 +60,7 @@ namespace jautomulti.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Telemovel,Email,NIF")] Proprietarios proprietarios)
+        public async Task<IActionResult> Create([Bind("Id,Nome,Telemovel,Email,NIF")] Proprietarios proprietarios)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +92,7 @@ namespace jautomulti.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Telemovel,Email,NIF")] Proprietarios proprietarios)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Telemovel,Email,NIF")] Proprietarios proprietarios)
         {
             if (id != proprietarios.Id)
             {
@@ -139,16 +145,9 @@ namespace jautomulti.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Proprietarios == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Proprietarios'  is null.");
-            }
-            var proprietarios = await _context.Proprietarios.FindAsync(id);
-            if (proprietarios != null)
-            {
-                _context.Proprietarios.Remove(proprietarios);
-            }
             
+            var proprietarios = await _context.Proprietarios.FindAsync(id);
+          _context.Proprietarios.Remove(proprietarios);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

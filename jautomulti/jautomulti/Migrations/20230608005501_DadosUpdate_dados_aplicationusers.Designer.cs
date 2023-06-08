@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using jautomulti.Data;
 
@@ -10,9 +11,11 @@ using jautomulti.Data;
 namespace jautomulti.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230608005501_DadosUpdate_dados_aplicationusers")]
+    partial class DadosUpdate_dados_aplicationusers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -142,17 +145,17 @@ namespace jautomulti.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "559541c2-5816-4b3e-ba09-b4dd3d88d5c8",
+                            Id = "1925379c-49dd-4b5e-88e3-9db88e23b927",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "dce2d364-8446-4581-8d9b-ec76c7bc84cd",
+                            ConcurrencyStamp = "3b1caf81-58dd-4e0c-a3f4-b8809b2b0073",
                             Email = "joaopfbatista@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "JOAOPFBATISTA@GMAIL.COM",
                             NormalizedUserName = "JOAOPFBATISTA@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGjohSkiuHp46Bh1l2cC82C470+dCTX7Hl4Y3PIQ4sHq7voAA0qAJlT/fqhsDqpSng==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKt4ojIAhrgRu5L22T8Gbv1NcoqK7LarTuTvI7wKNSTatokPf5tBGKmTqx76etAzjw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "95c03a1d-0b59-47bc-abd4-ba5833ed4862",
+                            SecurityStamp = "841ab844-c53e-4cb9-8c66-ce465aa37ec6",
                             TwoFactorEnabled = false,
                             UserName = "joaopfbatista@gmail.com"
                         });
@@ -481,9 +484,6 @@ namespace jautomulti.Migrations
                         .HasColumnType("varchar(1)");
 
                     b.Property<string>("Telemovel")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("UserID")
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");

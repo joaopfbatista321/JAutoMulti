@@ -19,8 +19,6 @@ namespace jautomulti.Controllers
             _context = context;
         }
 
-     
-
         // GET: Carros
         public async Task<IActionResult> Index()
         {
@@ -38,23 +36,9 @@ namespace jautomulti.Controllers
 
             var carros = await _context.Carros
                 .Include(c => c.Proprietario)
+                .Include(c => c.ListaReparacoes)
+                
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (carros == null)
-            {
-                return NotFound();
-            }
-
-
-            if (id == null || _context.Carros == null)
-            {
-                return NotFound();
-            }
-
-            var carro = await _context.Carros
-                .Include(c => c.Proprietario)
-                .Include(c => c.ListaReparacoes) // Inclui as reparações associadas ao carro
-                .FirstOrDefaultAsync(m => m.Id == id);
-
             if (carros == null)
             {
                 return NotFound();
@@ -66,7 +50,7 @@ namespace jautomulti.Controllers
         // GET: Carros/Create
         public IActionResult Create()
         {
-            ViewData["ProprietarioFK"] = new SelectList(_context.Proprietarios, "Id", "Id");
+            ViewData["ProprietarioFK"] = new SelectList(_context.Proprietarios, "Id", "Nome");
             return View();
         }
 
@@ -83,7 +67,7 @@ namespace jautomulti.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProprietarioFK"] = new SelectList(_context.Proprietarios, "Id", "Id", carros.ProprietarioFK);
+            ViewData["ProprietarioFK"] = new SelectList(_context.Proprietarios, "Id", "Nome", carros.ProprietarioFK);
             return View(carros);
            
         }
@@ -101,7 +85,7 @@ namespace jautomulti.Controllers
             {
                 return NotFound();
             }
-            ViewData["ProprietarioFK"] = new SelectList(_context.Proprietarios, "Id", "Id", carros.ProprietarioFK);
+            ViewData["ProprietarioFK"] = new SelectList(_context.Proprietarios, "Id", "Nome", carros.ProprietarioFK);
             return View(carros);
         }
 
@@ -137,7 +121,7 @@ namespace jautomulti.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProprietarioFK"] = new SelectList(_context.Proprietarios, "Id", "Id", carros.ProprietarioFK);
+            ViewData["ProprietarioFK"] = new SelectList(_context.Proprietarios, "Id", "Nome", carros.ProprietarioFK);
             return View(carros);
         }
 

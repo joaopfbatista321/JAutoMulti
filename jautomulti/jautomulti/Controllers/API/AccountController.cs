@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace jautomulti.Controllers.API
 {
@@ -31,6 +32,20 @@ namespace jautomulti.Controllers.API
             return Unauthorized();
         }
 
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(RegisterModel model)
+        {
+            var user = new IdentityUser { UserName = model.UserName };
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
+            {
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return Ok();
+            }
+
+            return BadRequest(result.Errors);
+        }
 
         [Authorize]
         [HttpGet("protected-route")]
@@ -50,5 +65,10 @@ namespace jautomulti.Controllers.API
         public string UserName { get; set; }
         public string Password { get; set; }
     }
-}
 
+    public class RegisterModel
+    {
+        public string UserName { get; set; }
+        public string Password { get; set; }
+    }
+}

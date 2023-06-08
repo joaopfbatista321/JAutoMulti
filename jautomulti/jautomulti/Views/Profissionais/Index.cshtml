@@ -1,16 +1,18 @@
 ﻿@model IEnumerable<jautomulti.Models.Profissionais>
 
 @{
+   
+    
     ViewData["Title"] = "Index";
 }
 
 <h1>Tabela dos Funcionarios da Oficina</h1>
 
-@if (User.IsInRole("Profissionais")) {
+
     <p>
         <a class="btn btn-outline-success" asp-action="Create">Criar Novo Funcionario</a>
     </p>
-}
+
 
 <table class="table table-hover table-striped">
    

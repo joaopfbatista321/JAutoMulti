@@ -22,7 +22,7 @@ namespace jautomulti.Controllers
         // GET: Reparacoes
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Reparacoes.Include(r => r.Carro);
+            var applicationDbContext = _context.Reparacoes.Include(r => r.Carro).Include(r => r.ListaProfissionaisNaReparacao);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -36,6 +36,7 @@ namespace jautomulti.Controllers
 
             var reparacoes = await _context.Reparacoes
                 .Include(r => r.Carro)
+                .Include(r => r.ListaProfissionaisNaReparacao)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (reparacoes == null)
             {
@@ -59,8 +60,15 @@ namespace jautomulti.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,DataInicio,DataFim,Observacoes,Preco,CarroFK,ListaProfissionaisNaReparacao")] Reparacoes reparacoes)
+        public async Task<IActionResult> Create([Bind("Id,DataInicio,DataFim,Observacoes,AuxPreco,Preco,CarroFK,ListaProfissionaisNaReparacao")] Reparacoes reparacoes)
         {
+            // atribuir o valor do PrecoCompraAux, se existir,
+            // ao atributo PrecoCompra
+            if (!string.IsNullOrEmpty(reparacoes.AuxPreco))
+            {
+                reparacoes.Preco = Convert.ToDecimal(reparacoes.AuxPreco.Replace('.', ','));
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(reparacoes);
@@ -87,7 +95,9 @@ namespace jautomulti.Controllers
             }
             ViewData["CarroFK"] = new SelectList(_context.Carros, "Id", "Matricula", reparacoes.CarroFK);
             ViewData["ListaProfissionaisNaReparacao"] = new SelectList(_context.Profissionais, "Id", "Nome", reparacoes.ListaProfissionaisNaReparacao);
+           
             return View(reparacoes);
+            
         }
 
         // POST: Reparacoes/Edit/5
@@ -107,6 +117,9 @@ namespace jautomulti.Controllers
                 try
                 {
                     _context.Update(reparacoes);
+                  
+
+                   
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -124,6 +137,10 @@ namespace jautomulti.Controllers
             }
             ViewData["CarroFK"] = new SelectList(_context.Carros, "Id", "Matricula", reparacoes.CarroFK);
             ViewData["ListaProfissionaisNaReparacao"] = new SelectList(_context.Profissionais, "Id", "Nome", reparacoes.ListaProfissionaisNaReparacao);
+           
+
+            // Load the available professionals
+           // ViewData["Profissionais"] = new MultiSelectList(_context.Profissionais, "Id", "Nome", reparacoes.ListaProfissionaisNaReparacao);
             return View(reparacoes);
         }
 
@@ -137,6 +154,7 @@ namespace jautomulti.Controllers
 
             var reparacoes = await _context.Reparacoes
                 .Include(r => r.Carro)
+                .Include(r => r.ListaProfissionaisNaReparacao)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (reparacoes == null)
             {
@@ -151,10 +169,7 @@ namespace jautomulti.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Reparacoes == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Reparacoes'  is null.");
-            }
+           
             var reparacoes = await _context.Reparacoes.FindAsync(id);
             if (reparacoes != null)
             {

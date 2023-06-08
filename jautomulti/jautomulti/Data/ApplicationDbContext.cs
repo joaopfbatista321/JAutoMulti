@@ -5,7 +5,27 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 
 namespace jautomulti.Data {
-    public class ApplicationDbContext : IdentityDbContext {
+    /// <summary>
+    /// classe com os dados particulares do utilizador registado
+    /// </summary>
+    public class ApplicationUser : IdentityUser
+    {
+
+        /// <summary>
+        /// nome de batismo do utilizador
+        /// </summary>
+        public string NomeDoUtilizador { get; set; }
+
+        /// <summary>
+        /// data em que o utilizador se registou
+        /// </summary>
+        public DateTime DataRegisto { get; set; }
+
+    }
+
+
+
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>{
 
         /// <summary>
         /// Apresenta a Base de dados do projeto
@@ -15,9 +35,17 @@ namespace jautomulti.Data {
             : base(options) {
         }
 
-
+        // <summary>
+        /// este método é executado imediatamente antes 
+        /// da criação do Modelo.
+        /// É utilizado para adicionar as últimas instruções
+        /// à criação do modelo
+        /// </summary>
+        /// <param name="modelBuilder"></param>
 
         protected override void OnModelCreating(ModelBuilder builder) {
+            // 'importa' todo o comportamento do método, 
+            // aquando da sua definição na SuperClasse
             base.OnModelCreating(builder);
 
             builder.Entity<IdentityRole>().HasData(
@@ -33,7 +61,7 @@ namespace jautomulti.Data {
                 UserName = "joaopfbatista@gmail.com",
                 NormalizedUserName = "JOAOPFBATISTA@GMAIL.COM",
                 Id=Guid.NewGuid().ToString(),
-                PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null,"123")
+                PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null,"Joaopaulo123456789!")
             });
 
 
@@ -76,6 +104,10 @@ namespace jautomulti.Data {
                new Proprietarios { Id = 3, Nome = "Cristina Sousa", Sexo = "F", NIF = "265368715", Email = "Cris@gmail.com", Telemovel = "123456789" },
                new Proprietarios { Id = 4, Nome = "Sónia Rosa", Sexo = "F", NIF = "835623190", Email = "so@gmail.com", Telemovel = "123456789" }
             );
+
+            
+
+
         }
         
         /*

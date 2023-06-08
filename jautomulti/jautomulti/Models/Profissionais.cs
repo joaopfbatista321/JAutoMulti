@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace jautomulti.Models {
     public class Profissionais {
 
+        /// <summary>
+        /// modelo que interage com os dados dos Profissional
+        /// </summary>
         public Profissionais() {
             ListaReparacoes = new HashSet<Reparacoes>();
             // inicializar a lista de Carros do Mecanico

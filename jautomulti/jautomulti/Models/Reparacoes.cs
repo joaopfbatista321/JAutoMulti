@@ -25,13 +25,12 @@ namespace jautomulti.Models {
         /// Este valor auxilia a app a obter o Preço da Reparaçao
         /// </summary>
         [NotMapped] // esta anotação é para o atributo não ser representado na base dados
-        [Required]
+        [Required(ErrorMessage = "Preencha, pf, o valor da Reparação")]
         // tem de introduzir um valor de 0 a 9 de 1 a 8 algarismos, podendo conter um valor com duas casas decimais
         [RegularExpression("[0-9]{1,8}[,.]?[0-9]{0,2}", ErrorMessage = "Tem de introduzir o Preço da Marcação")] // tem de introduzir um valor de 
-        
+        [Display(Name = "Preço")]
         public string AuxPreco { get; set; }
        
-        [Display(Name = "Preço")]
         public decimal Preco { get; set; }
 
 
