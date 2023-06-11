@@ -1,5 +1,6 @@
 ﻿using jautomulti.Data;
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -40,7 +41,7 @@ namespace jautomulti.Models {
         [RegularExpression("[123578]+[0-9]{8}", ErrorMessage = "O {0} deve começar por 1, 2, 3, 5, 7 ou 8, e só ter algarismos.")]
         public string NIF { get; set; }
 
-
+        [Display(Name = "Lista de carros")]
         public ICollection<Carros> ListaCarros { get; set; }
 
           //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

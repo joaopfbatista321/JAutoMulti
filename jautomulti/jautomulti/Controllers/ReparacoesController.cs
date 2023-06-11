@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using jautomulti.Data;
 using jautomulti.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace jautomulti.Controllers
 {
+    [Authorize(Roles = "Profissional,Admin")]
     public class ReparacoesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -105,11 +108,13 @@ namespace jautomulti.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,DataInicio,DataFim,Observacoes,Preco,CarroFK,ListaProfissionaisNaReparacao")] Reparacoes reparacoes)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,DataInicio,DataFim,Observacoes,Preco,AuxPreco,CarroFK,ListaProfissionaisNaReparacao")] Reparacoes reparacoes)
         {
-            if (id != reparacoes.Id)
+            // atribuir o valor do PrecoCompraAux, se existir,
+            // ao atributo PrecoCompra
+            if (!string.IsNullOrEmpty(reparacoes.AuxPreco))
             {
-                return NotFound();
+                reparacoes.Preco = Convert.ToDecimal(reparacoes.AuxPreco.Replace('.', ','));
             }
 
             if (ModelState.IsValid)

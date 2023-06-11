@@ -138,43 +138,124 @@ namespace jautomulti.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                user.NomeDoUtilizador = Input.Proprietario?.Nome; // Add null check
+                user.DataRegisto = DateTime.Now;
 
-                // atribuir o nome de batismo e a data de registo ao novo utilizador
-                user.NomeDoUtilizador = Input.Proprietario.Nome;
-                 user.DataRegisto = DateTime.Now;
                 var result = await _userManager.CreateAsync(user, Input.Password);
-
-                //ApplicationUser userDaIdentity = await _userManager.FindByEmailAsync(Input.Email);
-                //Proprietarios proprietarios = new Proprietarios();
-                //proprietarios.Email = Input.Email;
-                //proprietarios.Nome = "João Silva";
-                //proprietarios.NIF = "223445667";
-                //proprietarios.Telemovel = "9159111123";
-                //proprietarios.UserID = userDaIdentity.Id;
-
-                //_context.Proprietarios.Add(proprietarios);
-                //  _context.SaveChanges();
 
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    if(string.IsNullOrEmpty(Input.RoleEscolhida)) { Input.RoleEscolhida = "Cliente"; }
+                    if (string.IsNullOrEmpty(Input.RoleEscolhida))
+                    {
+                        Input.RoleEscolhida = "Cliente";
+                    }
 
                     await _userManager.AddToRoleAsync(user, Input.RoleEscolhida);
 
-                    //if (Input.RoleEscolhida == "Profissional")
+                    if (Input.RoleEscolhida == "Profissional" && Input.Profissional != null)
+                    {
+                        Input.Profissional.Email = Input.Email;
+                        Input.Profissional.UserID = user.Id;
+
+                        try
+                        {
+                            _context.Add(Input.Profissional);
+                            await _context.SaveChangesAsync();
+                        }
+                        catch (Exception)
+                        {
+                            await _userManager.DeleteAsync(user);
+                            ModelState.AddModelError("", "An error occurred while creating the user.");
+                            return Page();
+                        }
+                    }
+                    else if (Input.Proprietario != null)
+                    {
+                        Input.Proprietario.Email = Input.Email;
+                        Input.Proprietario.UserID = user.Id;
+
+                        try
+                        {
+                            _context.Add(Input.Proprietario);
+                            await _context.SaveChangesAsync();
+                        }
+                        catch (Exception)
+                        {
+                            await _userManager.DeleteAsync(user);
+                            ModelState.AddModelError("", "An error occurred while creating the user.");
+                            return Page();
+                        }
+                    }
+
+                    //// atribuir o nome de batismo e a data de registo ao novo utilizador
+                    //user.NomeDoUtilizador = Input.Proprietario.Nome;
+                    // user.DataRegisto = DateTime.Now;
+                    //var result = await _userManager.CreateAsync(user, Input.Password);
+
+                    ////ApplicationUser userDaIdentity = await _userManager.FindByEmailAsync(Input.Email);
+                    ////Proprietarios proprietarios = new Proprietarios();
+                    ////proprietarios.Email = Input.Email;
+                    ////proprietarios.Nome = "João Silva";
+                    ////proprietarios.NIF = "223445667";
+                    ////proprietarios.Telemovel = "9159111123";
+                    ////proprietarios.UserID = userDaIdentity.Id;
+
+                    ////_context.Proprietarios.Add(proprietarios);
+                    ////  _context.SaveChanges();
+
+                    //if (result.Succeeded)
                     //{
-                    //    // Encontre o profissional correspondente ao usuário registrado
-                    //    Input.Profissional.Email = Input.Email;
+                    //    _logger.LogInformation("User created a new account with password.");
+
+                    //    if(string.IsNullOrEmpty(Input.RoleEscolhida)) { Input.RoleEscolhida = "Cliente"; }
+
+                    //    await _userManager.AddToRoleAsync(user, Input.RoleEscolhida);
+
+                    //    //if (Input.RoleEscolhida == "Profissional")
+                    //    //{
+                    //    //    // Encontre o profissional correspondente ao usuário registrado
+                    //    //    Input.Profissional.Email = Input.Email;
+                    //    //    // (2)
+                    //    //    Input.Profissional.UserID = user.Id;
+                    //    //    try
+                    //    //    {
+                    //    //        // (3)
+                    //    //        _context.Add(Input.Profissional);
+
+
+                    //    //        await _context.SaveChangesAsync();
+                    //    //    }
+                    //    //    catch (Exception)
+                    //    //    {
+                    //    //        // se chego aqui, aconteceu um problema
+                    //    //        // e qual é?
+                    //    //        // não conseguir guardar os dados do novo Proprietario
+                    //    //        // o que fazer????
+                    //    //        // eliminar o utilizador já criado
+                    //    //        await _userManager.DeleteAsync(user);
+                    //    //        // criar msg de erro a ser enviada ao utilizador
+                    //    //        ModelState.AddModelError("", "Ocorreu um erro com a criação do Utilizador");
+
+
+                    //    //    }
+                    //    //}
+                    //    //else { 
+                    //        /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                    //   * guardar os dados do novo PROPRIETARIO
+                    //   * 1- atribuir ao novo Proprietario, o email
+                    //   * 2-                        o UserID
+                    //   * 3- guardar os dados na BD
+                    //   */
+                    //        // (1)
+                    //        Input.Proprietario.Email = Input.Email;
                     //    // (2)
-                    //    Input.Profissional.UserID = user.Id;
+                    //    Input.Proprietario.UserID = user.Id;
                     //    try
                     //    {
                     //        // (3)
-                    //        _context.Add(Input.Profissional);
-
-
+                    //        _context.Add(Input.Proprietario);
                     //        await _context.SaveChangesAsync();
                     //    }
                     //    catch (Exception)
@@ -189,45 +270,14 @@ namespace jautomulti.Areas.Identity.Pages.Account
                     //        ModelState.AddModelError("", "Ocorreu um erro com a criação do Utilizador");
 
 
+
+                    //        // notificar o Admin q ocorreu um erro...
+                    //        // escrever num ficheiro de log o erro...
+                    //        // etc. ...
+
+                    //        // devolver o controlo da app ao utilizador
+                    //        return Page(); // <=> return View();
                     //    }
-                    //}
-                    //else { 
-                        /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-                   * guardar os dados do novo PROPRIETARIO
-                   * 1- atribuir ao novo Proprietario, o email
-                   * 2-                        o UserID
-                   * 3- guardar os dados na BD
-                   */
-                        // (1)
-                        Input.Proprietario.Email = Input.Email;
-                    // (2)
-                    Input.Proprietario.UserID = user.Id;
-                    try
-                    {
-                        // (3)
-                        _context.Add(Input.Proprietario);
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (Exception)
-                    {
-                        // se chego aqui, aconteceu um problema
-                        // e qual é?
-                        // não conseguir guardar os dados do novo Proprietario
-                        // o que fazer????
-                        // eliminar o utilizador já criado
-                        await _userManager.DeleteAsync(user);
-                        // criar msg de erro a ser enviada ao utilizador
-                        ModelState.AddModelError("", "Ocorreu um erro com a criação do Utilizador");
-
-
-
-                        // notificar o Admin q ocorreu um erro...
-                        // escrever num ficheiro de log o erro...
-                        // etc. ...
-
-                        // devolver o controlo da app ao utilizador
-                        return Page(); // <=> return View();
-                    }
 
 
 

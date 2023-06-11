@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace jautomulti.Models {
     public class Carros {
@@ -63,8 +65,7 @@ namespace jautomulti.Models {
          *    - classes
          * */
 
-
-
+        [Display(Name = "Proprietario")]
         [ForeignKey(nameof(Proprietario))]
         public int ProprietarioFK { get; set; }
         public Proprietarios Proprietario{ get; set; }

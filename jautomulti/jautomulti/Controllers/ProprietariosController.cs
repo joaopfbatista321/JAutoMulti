@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace jautomulti.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Profissional,Admin")]
     public class ProprietariosController : Controller
     {
         private readonly ApplicationDbContext _context;
