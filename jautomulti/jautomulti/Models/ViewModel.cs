@@ -16,6 +16,16 @@
 
         public string Fotografia { get; set; }
         public string Proprietario { get; set; }
+
+        ICollection<FotografiasViewModel> Fotografias { get; set; }
+    }
+
+    public class FotografiasViewModel
+    {
+        public int Id { get; set; }
+
+        public string NomeFicheiro { get; set; }
+
     }
 
     public class ProprietariosViewModel
