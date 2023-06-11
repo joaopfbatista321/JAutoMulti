@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licencie to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
@@ -10,6 +10,8 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using jautomulti.Data;
+using jautomulti.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -23,19 +25,27 @@ namespace jautomulti.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IUserStore<IdentityUser> _userStore;
-        private readonly IUserEmailStore<IdentityUser> _emailStore;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserStore<ApplicationUser> _userStore;
+        private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
+        /// <summary>
+        /// classe q representa o acesso à BD do sistema
+        /// </summary>
+        private readonly ApplicationDbContext _context;
+
+
         public RegisterModel(
-            UserManager<IdentityUser> userManager,
-            IUserStore<IdentityUser> userStore,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<ApplicationUser> userManager,
+            IUserStore<ApplicationUser> userStore,
+            SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ApplicationDbContext context)
+           
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -43,6 +53,7 @@ namespace jautomulti.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context; 
         }
 
         /// <summary>
@@ -97,6 +108,17 @@ namespace jautomulti.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+
+            /// <summary>
+            /// dados do dono que ficará associado à autenticação
+            /// </summary>
+            public Proprietarios Proprietario { get; set; }
+
+            public Profissionais Profissional { get; set; }
+
+
+            public  string RoleEscolhida { get; set; }
         }
 
 
@@ -109,18 +131,105 @@ namespace jautomulti.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            //ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
+                // atribuir o nome de batismo e a data de registo ao novo utilizador
+                user.NomeDoUtilizador = Input.Proprietario.Nome;
+                 user.DataRegisto = DateTime.Now;
                 var result = await _userManager.CreateAsync(user, Input.Password);
+
+                //ApplicationUser userDaIdentity = await _userManager.FindByEmailAsync(Input.Email);
+                //Proprietarios proprietarios = new Proprietarios();
+                //proprietarios.Email = Input.Email;
+                //proprietarios.Nome = "João Silva";
+                //proprietarios.NIF = "223445667";
+                //proprietarios.Telemovel = "9159111123";
+                //proprietarios.UserID = userDaIdentity.Id;
+
+                //_context.Proprietarios.Add(proprietarios);
+                //  _context.SaveChanges();
 
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    if(string.IsNullOrEmpty(Input.RoleEscolhida)) { Input.RoleEscolhida = "Cliente"; }
+
+                    await _userManager.AddToRoleAsync(user, Input.RoleEscolhida);
+
+                    //if (Input.RoleEscolhida == "Profissional")
+                    //{
+                    //    // Encontre o profissional correspondente ao usuário registrado
+                    //    Input.Profissional.Email = Input.Email;
+                    //    // (2)
+                    //    Input.Profissional.UserID = user.Id;
+                    //    try
+                    //    {
+                    //        // (3)
+                    //        _context.Add(Input.Profissional);
+
+
+                    //        await _context.SaveChangesAsync();
+                    //    }
+                    //    catch (Exception)
+                    //    {
+                    //        // se chego aqui, aconteceu um problema
+                    //        // e qual é?
+                    //        // não conseguir guardar os dados do novo Proprietario
+                    //        // o que fazer????
+                    //        // eliminar o utilizador já criado
+                    //        await _userManager.DeleteAsync(user);
+                    //        // criar msg de erro a ser enviada ao utilizador
+                    //        ModelState.AddModelError("", "Ocorreu um erro com a criação do Utilizador");
+
+
+                    //    }
+                    //}
+                    //else { 
+                        /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                   * guardar os dados do novo PROPRIETARIO
+                   * 1- atribuir ao novo Proprietario, o email
+                   * 2-                        o UserID
+                   * 3- guardar os dados na BD
+                   */
+                        // (1)
+                        Input.Proprietario.Email = Input.Email;
+                    // (2)
+                    Input.Proprietario.UserID = user.Id;
+                    try
+                    {
+                        // (3)
+                        _context.Add(Input.Proprietario);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (Exception)
+                    {
+                        // se chego aqui, aconteceu um problema
+                        // e qual é?
+                        // não conseguir guardar os dados do novo Proprietario
+                        // o que fazer????
+                        // eliminar o utilizador já criado
+                        await _userManager.DeleteAsync(user);
+                        // criar msg de erro a ser enviada ao utilizador
+                        ModelState.AddModelError("", "Ocorreu um erro com a criação do Utilizador");
+
+
+
+                        // notificar o Admin q ocorreu um erro...
+                        // escrever num ficheiro de log o erro...
+                        // etc. ...
+
+                        // devolver o controlo da app ao utilizador
+                        return Page(); // <=> return View();
+                    }
+
+
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -154,27 +263,27 @@ namespace jautomulti.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private ApplicationUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return Activator.CreateInstance<ApplicationUser>();
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
-                    $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
+                    $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
 
-        private IUserEmailStore<IdentityUser> GetEmailStore()
+        private IUserEmailStore<ApplicationUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<IdentityUser>)_userStore;
+            return (IUserEmailStore<ApplicationUser>)_userStore;
         }
     }
 }

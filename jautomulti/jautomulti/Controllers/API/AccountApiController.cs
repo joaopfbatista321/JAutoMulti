@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using jautomulti.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -7,12 +8,12 @@ namespace jautomulti.Controllers.API
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AccountController : ControllerBase
+    public class AccountApiController : ControllerBase
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public AccountController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
+        public AccountApiController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -35,7 +36,7 @@ namespace jautomulti.Controllers.API
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterModel model)
         {
-            var user = new IdentityUser { UserName = model.UserName };
+            var user = new ApplicationUser { UserName = model.UserName};
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)

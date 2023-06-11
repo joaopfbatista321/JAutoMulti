@@ -107,7 +107,7 @@ namespace jautomulti.Controllers.API
                  */
 
 
-               // carro.Fotografia = "carroVazio.jpg";
+                //carro.Fotografia = "noCar.jpg";
 
 
                 // 3.

@@ -6,21 +6,30 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Tabela dos Funcionarios da Oficina</h1>
+<h1>Tabela dos Funcionários da Oficina</h1>
 
-
+@*
     <p>
         <a class="btn btn-outline-success" asp-action="Create">Criar Novo Funcionario</a>
     </p>
-
-
+*@
+<p>
+    <a class="btn btn-outline-success" asp-page="/Account/Register" asp-area="Identity">Criar Novo Funcionario</a>
+</p>
+t
 <table class="table table-hover table-striped">
    
-
+    
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sexo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NIF)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Alcunha)
@@ -50,6 +59,12 @@
                 @Html.DisplayFor(modelItem => item.Nome)
             </td>
             <td>
+                    @Html.DisplayFor(modelItem => item.Sexo)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.NIF)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Alcunha)
             </td>
             <td>
@@ -68,9 +83,9 @@
                 @Html.DisplayFor(modelItem => item.Especializacao)
             </td>
             <td>
-                    <a asp-action="Edit" class="btn btn-outline-warning" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" class="btn btn-outline-info" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" class="btn btn-outline-danger" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Edit" class="btn btn-outline-warning" asp-route-id="@item.Id">Editar</a> |
+                    <a asp-action="Details" class="btn btn-outline-info" asp-route-id="@item.Id">Detalhes</a> |
+                    <a asp-action="Delete" class="btn btn-outline-danger" asp-route-id="@item.Id">Apagar</a>
             </td>
         </tr>
 }

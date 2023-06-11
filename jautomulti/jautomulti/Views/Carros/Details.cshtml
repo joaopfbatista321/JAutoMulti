@@ -85,8 +85,28 @@
             </ul>
         </dd>
 
+        <dd class="col-sm-10">
+            <a asp-action="Details"
+               asp-controller="Proprietarios"
+               asp-route-id="@Model?.Proprietario.Id">
+                @Html.DisplayFor(model => model.Proprietario.Nome)
+            </a>
+        </dd>
+
     </dl>
 </div>
+
+<h4>Fotografias do @Model.Matricula</h4>
+
+@foreach (var foto in Model.Fotografia)
+{
+    <p>
+        <img src="~/imagens/@foto.NomeFicheiro"
+             alt="fotografia do @Model.Matricula"
+             title="@Model.Matricula no @foto.Local em @foto.DataFotografia"
+             width="100px" />
+    </p>
+}
 <div>
     <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@Model?.Id">Editar</a> |
     <a class="btn btn-outline-primary" asp-action="Index">Voltar à Lista de Carros</a>

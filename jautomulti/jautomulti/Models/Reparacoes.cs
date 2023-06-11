@@ -43,7 +43,7 @@ namespace jautomulti.Models {
         //public int MecanicoFK { get; set; }
         //public Mecanicos Mecanico { get; set; }
 
-      
+        [Display(Name = "Profissionais")]
         public ICollection<Profissionais> ListaProfissionaisNaReparacao { get; set; }
       
 

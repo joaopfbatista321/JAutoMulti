@@ -10,7 +10,6 @@ namespace jautomulti.Data {
     /// </summary>
     public class ApplicationUser : IdentityUser
     {
-
         /// <summary>
         /// nome de batismo do utilizador
         /// </summary>
@@ -50,18 +49,19 @@ namespace jautomulti.Data {
 
             builder.Entity<IdentityRole>().HasData(
                 new IdentityRole { Id = "adm", Name = "Admin", NormalizedName = "ADMINISTRADOR" },
-                 new IdentityRole { Id = "prof", Name = "Profissional", NormalizedName = "PROFISSIONAL" },
-                  new IdentityRole { Id = "cli", Name = "Cliente", NormalizedName = "CLIENTE" }
-                );
+                new IdentityRole { Id = "prof", Name = "Profissional", NormalizedName = "PROFISSIONAL" },
+                new IdentityRole { Id = "cli", Name = "Cliente", NormalizedName = "CLIENTE" }
+             );
             
 
-            builder.Entity<IdentityUser>().HasData(new IdentityUser{
+            builder.Entity<ApplicationUser>().HasData(new ApplicationUser
+            {
                 Email = "joaopfbatista@gmail.com",
                 NormalizedEmail = "JOAOPFBATISTA@GMAIL.COM",
                 UserName = "joaopfbatista@gmail.com",
                 NormalizedUserName = "JOAOPFBATISTA@GMAIL.COM",
                 Id=Guid.NewGuid().ToString(),
-                PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(null,"Joaopaulo123456789!")
+                PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(null,"Joaopaulo123456789!")
             });
 
 

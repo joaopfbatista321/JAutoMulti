@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using jautomulti.Data;
+using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace jautomulti.Models {
@@ -41,13 +43,14 @@ namespace jautomulti.Models {
 
         public ICollection<Carros> ListaCarros { get; set; }
 
-        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        /// <summary>
-        /// atributo para executar a FK que permitirá ligar a tabela da 
-        /// autenticação à tabela dos proprietarios
-        /// </summary>
-        public string UserID { get; set; }
-        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+          //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+      /// <summary>
+      /// atributo para executar a FK que permitirá ligar a tabela da 
+      /// autenticação à tabela dos donos
+      /// </summary>
+      public string UserID { get; set; }
+   //   public ApplicationUser user { get; set; }
+      //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     }
 }

@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using jautomulti.Data;
 using jautomulti.Models;
-using jautomulti.Migrations;
 using Microsoft.AspNetCore.Authorization;
 
 namespace jautomulti.Controllers
@@ -27,7 +26,7 @@ namespace jautomulti.Controllers
 *                                            E
 *                                            Administrativo
 */
-   // [Authorize(Roles = "Profissional,Admin")]
+   [Authorize(Roles = "Profissional,Admin")]
     public class ProfissionaisController : Controller
     {
     
@@ -82,60 +81,60 @@ namespace jautomulti.Controllers
             return View(profissionais);
         }
 
-        // GET: Profissionais/Create
-        /// <summary>
-        /// usado para o primeiro acesso à View 'Create', em modo HTTP GET
-        /// </summary>
-        /// <returns></returns>
-        public IActionResult Create()
-        {
-            return View();
-        }
+        //// GET: Profissionais/Create
+        ///// <summary>
+        ///// usado para o primeiro acesso à View 'Create', em modo HTTP GET
+        ///// </summary>
+        ///// <returns></returns>
+        //public IActionResult Create()
+        //{
+        //    return View();
+        //}
 
-        // POST: Profissionais/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        /// <summary>
-        /// método usado para recuperar os dados enviados pelos utilizadores, 
-        /// do Browser para o servidor
-        /// </summary>
-        /// <param name="profissionais"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Alcunha,Morada,CodPostal,Email,Telemovel,Especializacao")] Profissionais profissionais)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(profissionais);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(profissionais);
-        }
+        //// POST: Profissionais/Create
+        //// To protect from overposting attacks, enable the specific properties you want to bind to.
+        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        ///// <summary>
+        ///// método usado para recuperar os dados enviados pelos utilizadores, 
+        ///// do Browser para o servidor
+        ///// </summary>
+        ///// <param name="profissionais"></param>
+        ///// <returns></returns>
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Create([Bind("Id,Nome,Alcunha,Morada,CodPostal,Email,Telemovel,Especializacao")] Profissionais profissionais)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _context.Add(profissionais);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(profissionais);
+        //}
 
-        // GET: Profissionais/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Profissionais == null)
-            {
-                return NotFound();
-            }
+        //// GET: Profissionais/Edit/5
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    if (id == null || _context.Profissionais == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var profissionais = await _context.Profissionais.FindAsync(id);
-            if (profissionais == null)
-            {
-                return NotFound();
-            }
-            return View(profissionais);
-        }
+        //    var profissionais = await _context.Profissionais.FindAsync(id);
+        //    if (profissionais == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(profissionais);
+        //}
 
         // POST: Profissionais/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Alcunha,Morada,CodPostal,Email,Telemovel,Especializacao")] Profissionais profissionais)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Sexo,NIF,Alcunha,Morada,CodPostal,Email,Telemovel,Especializacao")] Profissionais profissionais)
         {
             if (id != profissionais.Id)
             {

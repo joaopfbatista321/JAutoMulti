@@ -10,8 +10,23 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySQL(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services
+     .AddDefaultIdentity<ApplicationUser>(options =>
+     {
+         options.SignIn.RequireConfirmedAccount = true;
+         options.Password.RequireDigit = true;
+         options.Password.RequireLowercase = true;
+         options.Password.RequireUppercase = true;
+         options.Password.RequireNonAlphanumeric = false;
+         options.Password.RequiredLength = 8;
+         options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+         options.Lockout.MaxFailedAccessAttempts = 5;
+     })
+    //.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
+
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

@@ -11,8 +11,8 @@ using jautomulti.Data;
 namespace jautomulti.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230606104153_inicial")]
-    partial class inicial
+    [Migration("20230609123006_User")]
+    partial class User
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,6 +46,26 @@ namespace jautomulti.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "adm",
+                            Name = "Admin",
+                            NormalizedName = "ADMINISTRADOR"
+                        },
+                        new
+                        {
+                            Id = "prof",
+                            Name = "Profissional",
+                            NormalizedName = "PROFISSIONAL"
+                        },
+                        new
+                        {
+                            Id = "cli",
+                            Name = "Cliente",
+                            NormalizedName = "CLIENTE"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -69,88 +89,6 @@ namespace jautomulti.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
-
-                    b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "f6c32ff8-a06c-487b-ac18-3b83cafd97f2",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "8d3b5e25-e77a-4b42-9238-852bf649d64c",
-                            Email = "joaopfbatista@gmail.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "JOAOPFBATISTA@GMAIL.COM",
-                            NormalizedUserName = "JOAOPFBATISTA@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEHu4KTgJZV64yJR/eUlsSVORKKXcDgZ85v/L0Ua0lgCHbEWZ4lV9LgRhOXqLA9EOWA==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "83a21b72-7cab-4d3d-b009-98751c8fe445",
-                            TwoFactorEnabled = false,
-                            UserName = "joaopfbatista@gmail.com"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -249,6 +187,95 @@ namespace jautomulti.Migrations
                     b.HasIndex("ListaReparacoesId");
 
                     b.ToTable("ProfissionaisReparacoes");
+                });
+
+            modelBuilder.Entity("jautomulti.Data.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("DataRegisto")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("NomeDoUtilizador")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("varchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
+
+                    b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "22f51889-d438-43ff-9612-dec648c3eafe",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "434abff9-aeb0-48bc-a355-c6623e34c63f",
+                            DataRegisto = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "joaopfbatista@gmail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "JOAOPFBATISTA@GMAIL.COM",
+                            NormalizedUserName = "JOAOPFBATISTA@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOhi/cIcC6Q82YzSLSH00ySnK4fH81KKpApShkyLBp9dZ4ASInI2ICp/RAAsHbNE/A==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "fdc68d2d-ec19-4440-8674-3725bf1e21b3",
+                            TwoFactorEnabled = false,
+                            UserName = "joaopfbatista@gmail.com"
+                        });
                 });
 
             modelBuilder.Entity("jautomulti.Models.Carros", b =>
@@ -351,9 +378,40 @@ namespace jautomulti.Migrations
                         .HasMaxLength(9)
                         .HasColumnType("varchar(9)");
 
+                    b.Property<string>("UserID")
+                        .HasColumnType("varchar(255)");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("UserID");
+
                     b.ToTable("Profissionais");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "jjj@gmail.com",
+                            Especializacao = "Eletricista",
+                            Nome = "José Silva",
+                            Telemovel = "951357852"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Email = "jjj@gmail.com",
+                            Especializacao = "Pintura",
+                            Nome = "Maria Gomes dos Santos",
+                            Telemovel = "951357852"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Email = "jjj@gmail.com",
+                            Especializacao = "Mecanica",
+                            Nome = "Ricardo Sousa",
+                            Telemovel = "951357852"
+                        });
                 });
 
             modelBuilder.Entity("jautomulti.Models.Proprietarios", b =>
@@ -366,20 +424,68 @@ namespace jautomulti.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("NIF")
-                        .HasColumnType("longtext");
+                        .IsRequired()
+                        .HasMaxLength(9)
+                        .HasColumnType("varchar(9)");
 
                     b.Property<string>("Nome")
-                        .HasColumnType("longtext");
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("varchar(30)");
 
                     b.Property<string>("Sexo")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(1)
+                        .HasColumnType("varchar(1)");
 
                     b.Property<string>("Telemovel")
                         .HasColumnType("longtext");
 
+                    b.Property<string>("UserID")
+                        .HasColumnType("varchar(255)");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("UserID");
+
                     b.ToTable("Proprietarios");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "Luis@gmail.com",
+                            NIF = "813635582",
+                            Nome = "Luís Freitas",
+                            Sexo = "M",
+                            Telemovel = "123456789"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Email = "As@gmail.com",
+                            NIF = "854613462",
+                            Nome = "Andreia Gomes",
+                            Sexo = "F",
+                            Telemovel = "123456789"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Email = "Cris@gmail.com",
+                            NIF = "265368715",
+                            Nome = "Cristina Sousa",
+                            Sexo = "F",
+                            Telemovel = "123456789"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Email = "so@gmail.com",
+                            NIF = "835623190",
+                            Nome = "Sónia Rosa",
+                            Sexo = "F",
+                            Telemovel = "123456789"
+                        });
                 });
 
             modelBuilder.Entity("jautomulti.Models.Reparacoes", b =>
@@ -421,7 +527,7 @@ namespace jautomulti.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("jautomulti.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -430,7 +536,7 @@ namespace jautomulti.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("jautomulti.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -445,7 +551,7 @@ namespace jautomulti.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("jautomulti.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -454,7 +560,7 @@ namespace jautomulti.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("jautomulti.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -496,6 +602,24 @@ namespace jautomulti.Migrations
                         .IsRequired();
 
                     b.Navigation("Carro");
+                });
+
+            modelBuilder.Entity("jautomulti.Models.Profissionais", b =>
+                {
+                    b.HasOne("jautomulti.Data.ApplicationUser", "user")
+                        .WithMany()
+                        .HasForeignKey("UserID");
+
+                    b.Navigation("user");
+                });
+
+            modelBuilder.Entity("jautomulti.Models.Proprietarios", b =>
+                {
+                    b.HasOne("jautomulti.Data.ApplicationUser", "user")
+                        .WithMany()
+                        .HasForeignKey("UserID");
+
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("jautomulti.Models.Reparacoes", b =>

@@ -1,7 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using jautomulti.Data;
+using Microsoft.AspNetCore.Authorization;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace jautomulti.Models {
+    [Authorize(Roles = "Admin")]
     public class Profissionais {
 
         /// <summary>
@@ -34,6 +37,12 @@ namespace jautomulti.Models {
         [Required(ErrorMessage = "O {0} é de preenchimento obrigatório.")]
         [StringLength(50)]
         public string Nome { get; set; }
+
+        [StringLength(1, ErrorMessage = "O {0} só aceita um caráter.")]
+        [RegularExpression("[FfMm]", ErrorMessage = "No {0} só se aceitam as letras F ou M.")]
+        public string Sexo { get; set; }
+
+        public string NIF { get; set; }
 
         /// <summary>
         /// nome pelo qual o Mecanico é conhecido 
@@ -93,7 +102,15 @@ namespace jautomulti.Models {
         /// Lista das Reparações associadas ao Mecanico
         /// </summary>
         public ICollection<Reparacoes> ListaReparacoes { get; set; }
-        
 
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        /// <summary>
+        /// atributo para executar a FK que permitirá ligar a tabela da 
+        /// autenticação à tabela dos donos
+        /// </summary>
+        public string UserID { get; set; }
+        
+        //public ApplicationUser user { get; set; }
+        //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     }
 }
