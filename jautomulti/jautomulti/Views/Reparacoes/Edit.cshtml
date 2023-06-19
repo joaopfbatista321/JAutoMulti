@@ -29,7 +29,7 @@
                 <span asp-validation-for="Observacoes" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Preco" class="control-label"></label>
+                <label asp-for="AuxPreco" class="control-label"></label>
                 <input asp-for="AuxPreco" class="form-control" />
                 <span asp-validation-for="AuxPreco" class="text-danger"></span>
             </div>
@@ -38,6 +38,11 @@
                 <select asp-for="CarroFK" class="form-control" asp-items="ViewBag.CarroFK"></select>
                 <span asp-validation-for="CarroFK" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="ListaProfissionaisNaReparacao" class="control-label"></label>
+                <select asp-for="ListaProfissionaisNaReparacao" class="form-control" asp-items="ViewBag.ListaProfissionaisNaReparacao" multiple></select>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Guardar" class="btn btn-outline-success" />
             </div>

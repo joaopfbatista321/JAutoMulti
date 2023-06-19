@@ -58,6 +58,14 @@
                 <select asp-for="ProprietarioFK" class="form-control" asp-items="ViewBag.ProprietarioFK"></select>
                 <span asp-validation-for="ProprietarioFK" class="text-danger"></span>
             </div>
+            @* recolher a imagem do carro *@
+            <div class="form-group">
+                <label class="control-label">Fotografia</label>
+                <input class="form-control"
+                       type="file"
+                       accept=".jpg,.jpeg,.png"
+                       name="fotografiaCarro" />
+            </div>
             <div class="form-group">
                 <input type="submit" value="Guardar" class="btn btn-outline-success" />
             </div>

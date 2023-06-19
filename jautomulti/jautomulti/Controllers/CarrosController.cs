@@ -47,7 +47,7 @@ namespace jautomulti.Controllers
             var carros = await _context.Carros
                 .Include(c => c.Proprietario)
                 .Include(c => c.ListaReparacoes)
-                .Include(c => c.Fotografia)
+                .Include(c => c.Fotografias)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (carros == null)
             {
@@ -97,7 +97,7 @@ namespace jautomulti.Controllers
                 {
                     // não há foto.
                     // adiciona-se a foto prédefinida
-                    carros.Fotografia
+                    carros.Fotografias
                           .Add(new Fotografias
                           {
                               DataFotografia = DateTime.Now,
@@ -109,13 +109,12 @@ namespace jautomulti.Controllers
                 {
                     // há ficheiro.
                     // Mas, será válido?
-                    if (fotografiaCarro.ContentType == "image/jpeg" ||
-                       fotografiaCarro.ContentType == "image/png")
+                    if (!(fotografiaCarro.ContentType == "image/jpeg" ||
+                       fotografiaCarro.ContentType == "image/png"))
                     {
-                        // imagem válida
+                        // imagem invalida
                         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types
-                        // vamos processar a imagem
-                        carros.Fotografia.Add(new Fotografias { DataFotografia = DateTime.Now, Local = "noImage", NomeFicheiro = "noCar.jpeg" });
+                        carros.Fotografias.Add(new Fotografias { DataFotografia = DateTime.Now, Local = "noImage", NomeFicheiro = "noCar.jpeg" });
 
                     }
                     else
@@ -126,7 +125,7 @@ namespace jautomulti.Controllers
                         string extensaoDaFoto = Path.GetExtension(fotografiaCarro.FileName).ToLower();
                         nomeFoto += extensaoDaFoto;
                         // adiciona-se a foto à lista de fotografias
-                        carros.Fotografia.Add(new Fotografias
+                        carros.Fotografias.Add(new Fotografias
                         {
                             DataFotografia = DateTime.Now,
                             Local = "",
@@ -207,32 +206,100 @@ namespace jautomulti.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,VIN,DataMatricula,DataCompra,Tipo,Matricula,Marca,Modelo,Cor,ProprietarioFK")] Carros carros)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,VIN,DataMatricula,DataCompra,Tipo,Matricula,Marca,Modelo,Cor,ProprietarioFK")] Carros carros, IFormFile fotografiaCarro)
         {
-            if (id != carros.Id)
-            {
-                return NotFound();
-            }
 
-            if (ModelState.IsValid)
+            // vars. auxiliares
+            string nomeFoto = "";
+            bool existeFoto = false;
+
+            // validação do Proprietario
+            if (carros.ProprietarioFK == 0)
             {
-                try
+                ModelState.AddModelError("", "É necessário escolher o Proprietario do Carro.");
+            }
+            else
+            {
+                // existe foto? é válida?
+                if (fotografiaCarro == null)
                 {
-                    _context.Update(carros);
-                    await _context.SaveChangesAsync();
+                    // não há foto.
+                    // adiciona-se a foto prédefinida
+                    carros.Fotografias
+                          .Add(new Fotografias
+                          {
+                              DataFotografia = DateTime.Now,
+                              Local = "NoImage",
+                              NomeFicheiro = "noCar.jpeg"
+                          });
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!CarrosExists(carros.Id))
+                    // há ficheiro.
+                    // Mas, será válido?
+                    if (!(fotografiaCarro.ContentType == "image/jpeg" ||
+                       fotografiaCarro.ContentType == "image/png"))
                     {
-                        return NotFound();
+                        // imagem invalida
+                        // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types
+                        carros.Fotografias.Add(new Fotografias { DataFotografia = DateTime.Now, Local = "noImage", NomeFicheiro = "noCar.jpeg" });
+
                     }
                     else
                     {
-                        throw;
+                        // definir o nome da imagem
+                        Guid g = Guid.NewGuid();
+                        nomeFoto = g.ToString();
+                        string extensaoDaFoto = Path.GetExtension(fotografiaCarro.FileName).ToLower();
+                        nomeFoto += extensaoDaFoto;
+                        // adiciona-se a foto à lista de fotografias
+                        carros.Fotografias.Add(new Fotografias
+                        {
+                            DataFotografia = DateTime.Now,
+                            Local = "",
+                            NomeFicheiro = nomeFoto
+                        });
+                        // preparar a foto para ser guardada
+                        // no disco rígido do servidor
+                        existeFoto = true;
                     }
+
+                }//Pro
+            }
+            if (ModelState.IsValid)
+            {
+                _context.Update(carros);
+                await _context.SaveChangesAsync();
+
+                // agora já posso guardar a imagem no disco 
+                // rígido do servidor
+                if (existeFoto)
+                {
+                    // definir o locar onde a foto vai ser guardada
+                    // para isso vamos perguntar ao servidor onde está 
+                    // a pasta wwwroot/imagens
+                    string nomeLocalizacaoImagem = _webHostEnvironment.WebRootPath;
+
+                    //    - falta definir o nome que o ficheiro vai ter no disco rígido
+                    nomeLocalizacaoImagem =
+                       Path.Combine(nomeLocalizacaoImagem, "imagens");
+
+                    //    - falta garantir que a pasta onde se vai guardar o ficheiro existe
+                    if (!Directory.Exists(nomeLocalizacaoImagem))
+                    {
+                        Directory.CreateDirectory(nomeLocalizacaoImagem);
+                    }
+
+                    //    - agora já é possível guardar a imagem
+                    //         - definir o nome da imagem no disco rígido
+                    string nomeFotoImagem = Path.Combine(nomeLocalizacaoImagem, nomeFoto);
+
+                    //         - criar objeto para manipular a imagem
+                    using var stream = new FileStream(nomeFotoImagem, FileMode.Create);
+
+                    //         - guardar, realmente, o ficheiro no disco rígido
+                    await fotografiaCarro.CopyToAsync(stream);
                 }
-                return RedirectToAction(nameof(Index));
             }
             ViewData["ProprietarioFK"] = new SelectList(_context.Proprietarios, "Id", "Nome", carros.ProprietarioFK);
             return View(carros);

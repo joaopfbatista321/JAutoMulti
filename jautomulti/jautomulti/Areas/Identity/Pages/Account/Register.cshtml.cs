@@ -45,7 +45,7 @@ namespace jautomulti.Areas.Identity.Pages.Account
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
             ApplicationDbContext context)
-           
+
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -53,7 +53,7 @@ namespace jautomulti.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
-            _context = context; 
+            _context = context;
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace jautomulti.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "A {0} deve ter no minimo {2} e no maximo {1} caracteres.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
@@ -105,8 +105,8 @@ namespace jautomulti.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Confirmar password")]
+            [Compare("Password", ErrorMessage = "A password 1 confirmar password não coecidem.")]
             public string ConfirmPassword { get; set; }
 
 
@@ -115,23 +115,66 @@ namespace jautomulti.Areas.Identity.Pages.Account
             /// </summary>
             public Proprietarios Proprietario { get; set; }
 
-            public Profissionais Profissional { get; set; }
 
 
-            public  string RoleEscolhida { get; set; }
-        }
+            // atributos específicos do Profissional
+
+            /// <summary>
+            /// nome pelo qual o Mecanico é conhecido 
+            /// </summary>
+            [Display(Name = "Alcunha")]
+            [StringLength(50)]
+            public string Alcunha { get; set; }
+
+            /// <summary>
+            /// morada do Mecanico
+            /// </summary>
+            [StringLength(60)]
+            public string Morada { get; set; }
+
+            /// <summary>
+            /// Código Postal
+            /// </summary>
+            [Display(Name = "Código Postal")]
+            [RegularExpression("[1-9][0-9]{3}-[0-9]{3}( ){1,3}[A-Z -ÇÀÁÉÍÓÚÂÊÎÔÛ]+",
+                               ErrorMessage = "O {0} deve ter o formato XXXX-XXX NOME DA TERRA")]
+            [StringLength(20)]
+            public string CodPostal { get; set; }
+
+            /// <summary>
+            /// especialidade do mecânico (mecânico geral, eletricista auto, pintura, etc.)
+            /// </summary>
+            public string Especializacao { get; set; }
 
 
+            public string RoleEscolhida { get; set; }
+        }// fim da classe Input
+
+
+        /// <summary>
+        /// método que reage a uma invocação em Get do HTTP
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
+        /// <summary>
+        /// método reage ao verbo Post do HTTP
+        /// Irá inserir os dados 
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
             //ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+
+            //avalia se os dados do InputModel,que vêm da view, estão validos
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
@@ -154,14 +197,25 @@ namespace jautomulti.Areas.Identity.Pages.Account
 
                     await _userManager.AddToRoleAsync(user, Input.RoleEscolhida);
 
-                    if (Input.RoleEscolhida == "Profissional" && Input.Profissional != null)
+                    if (Input.RoleEscolhida == "Profissional")
                     {
-                        Input.Profissional.Email = Input.Email;
-                        Input.Profissional.UserID = user.Id;
+                        var prof = new Profissionais
+                        {
+                            Nome = Input.Proprietario.Nome,
+                            Alcunha = Input.Alcunha,
+                            Sexo = Input.Proprietario.Sexo,
+                            NIF = Input.Proprietario.NIF,
+                            Telemovel = Input.Proprietario.Telemovel,
+                            Email = Input.Email,
+                            Morada = Input.Morada,
+                            CodPostal = Input.CodPostal,
+                            Especializacao = Input.Especializacao,
+                            UserID = user.Id
+                        };
 
                         try
                         {
-                            _context.Add(Input.Profissional);
+                            _context.Add(prof);
                             await _context.SaveChangesAsync();
                         }
                         catch (Exception)

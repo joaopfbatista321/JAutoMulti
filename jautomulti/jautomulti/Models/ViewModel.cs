@@ -17,7 +17,7 @@
         public string Fotografia { get; set; }
         public string Proprietario { get; set; }
 
-        ICollection<FotografiasViewModel> Fotografias { get; set; }
+       
     }
 
     public class FotografiasViewModel
@@ -45,6 +45,24 @@
         public string NIF { get; set; }
 
         ICollection<CarrosViewModel> Carros { get; set; }
+    }
+
+    public class RegisterViewModel
+    {
+        public string Email { get; set; }
+
+        public string Password { get; set; }
+
+        public string ConfirmPassword { get; set; }
+    }
+
+    public class LoginViewModel
+    {
+        public string Email { get; set; }
+
+        public string Password { get; set; }
+
+        public bool RememberMe { get; set; }
     }
 
 }

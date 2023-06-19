@@ -26,7 +26,9 @@ namespace jautomulti.Controllers
 *                                            E
 *                                            Administrativo
 */
-   [Authorize(Roles = "Profissional,Admin")]
+   [Authorize(Roles = "Profissional, Admin")]
+    [Authorize]
+
     public class ProfissionaisController : Controller
     {
     
@@ -113,21 +115,21 @@ namespace jautomulti.Controllers
         //    return View(profissionais);
         //}
 
-        //// GET: Profissionais/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null || _context.Profissionais == null)
-        //    {
-        //        return NotFound();
-        //    }
+        // GET: Profissionais/Edit/5
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null || _context.Profissionais == null)
+            {
+                return NotFound();
+            }
 
-        //    var profissionais = await _context.Profissionais.FindAsync(id);
-        //    if (profissionais == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(profissionais);
-        //}
+            var profissionais = await _context.Profissionais.FindAsync(id);
+            if (profissionais == null)
+            {
+                return NotFound();
+            }
+            return View(profissionais);
+        }
 
         // POST: Profissionais/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.

@@ -6,7 +6,7 @@ namespace jautomulti.Models {
     public class Carros {
 
         public Carros() {
-            Fotografia = new HashSet<Fotografias>();
+            Fotografias = new HashSet<Fotografias>();
             ListaReparacoes = new HashSet<Reparacoes>();
        
         }
@@ -73,7 +73,7 @@ namespace jautomulti.Models {
         /// <summary>
         /// Lista das Fotografias associadas ao carro
         /// </summary>
-        public ICollection<Fotografias> Fotografia { get; set; }
+        public ICollection<Fotografias> Fotografias { get; set; }
 
         /// <summary>
         /// Lista das reparações associadas ao carro

@@ -55,39 +55,65 @@
             @if (User.IsInRole("Admin"))
             {
 
-               @* <div class="form-floating mb-3">
+                
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Alcunha" class="form-control" autocomplete="" aria-required="true" placeholder="" />
+                    <label asp-for="Input.Alcunha"></label>
+                    <span asp-validation-for="Input.Alcunha" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Especializacao" class="form-control" autocomplete="" aria-required="true" placeholder="" />
+                    <label asp-for="Input.Especializacao"></label>
+                    <span asp-validation-for="Input.Especializacao" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Morada" class="form-control" autocomplete="" aria-required="true" placeholder="" />
+                    <label asp-for="Input.Morada"></label>
+                    <span asp-validation-for="Input.Morada" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.CodPostal" class="form-control" autocomplete="" aria-required="true" placeholder="" />
+                    <label asp-for="Input.CodPostal"></label>
+                    <span asp-validation-for="Input.CodPostal" class="text-danger"></span>
+                </div>
+               
+                <div class="form-floating mb-3">
                     <select asp-for="Input.RoleEscolhida" class="form-control" aria-required="true">
                         <option value="">Selecione uma opção</option>
-                        <option value="ADMINISTRADOR">Admin</option>
-                        <option value="PROFISSIONAL">Profissional</option>
-                        <option value="CLIENTE">Cliente</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Profissional">Profissional</option>
+                        <option value="Cliente">Cliente</option>
                     </select>
                     <label asp-for="Input.RoleEscolhida"></label>
                     <span asp-validation-for="Input.RoleEscolhida" class="text-danger"></span>
-                </div>*@
-       
-                <div class="form-floating mb-3">
+                </div>
+
+               @* <div class="form-floating mb-3">
                     <input asp-for="Input.RoleEscolhida" class="form-control" autocomplete="" aria-required="true" placeholder="" />
                     <label asp-for="Input.RoleEscolhida"> Escolha o tipo de conta: Admin; Profissional; Cliente; </label>
                     <span asp-validation-for="Input.RoleEscolhida" class="text-danger"></span>
-                    
-                </div>
 
+                </div>
+            *@
                 <script>
-                    document.querySelector('[name="Input.RoleEscolhida"]').addEventListener('change', function() {
+                    document.querySelector('[name="Input.RoleEscolhida"]').addEventListener('change', function () {
                         var selectedOption = this.value;
                         if (selectedOption === 'Profissional') {
                             alert('Por favor, complete os dados da conta de Profissional quando completar o Registo.');
                         }
                     });
                 </script>
-                
+
             }
         </div>
 
 
 
-        <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+        <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Registar</button>
     </div>
 </form>
 

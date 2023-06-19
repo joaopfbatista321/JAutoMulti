@@ -1,50 +1,48 @@
-﻿using jautomulti.Data;
-using jautomulti.Models;
-using Microsoft.AspNetCore.Http;
+﻿// Licencie to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using jautomulti.Data;
+using jautomulti.Models;
 
 namespace jautomulti.Controllers.API
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CarrosApiController : ControllerBase
+    public class CarrosAPIController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public CarrosApiController(ApplicationDbContext context)
+        public CarrosAPIController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/CarrosApi
+        // GET: api/CarrosAPI
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CarrosViewModel>>> GetCarros()
         {
             var carros = await _context.Carros
-                .Include(a => a.Proprietario)
-                .Include(a => a.Fotografia)
-                .OrderByDescending(a => a.Id)
-                .Select(a => new CarrosViewModel
+                .Include(c => c.Proprietario)
+                //.Include(c => c.Fotografias)
+                .OrderByDescending(c => c.Id)
+                .Select(c => new CarrosViewModel
                 {
-                    Id = a.Id,
-                    Matricula = a.Matricula,
-                    Tipo = a.Tipo,
-                    Cor = a.Cor,
-                    Marca = a.Marca,
-                    Modelo = a.Modelo,
-                    Proprietario = a.Proprietario.Nome
+                    Id = c.Id,
+                    Matricula = c.Matricula,
+                    Tipo = c.Tipo,
+                    Cor = c.Cor,
+                    Marca = c.Marca,
+                    Modelo = c.Modelo,
+                    //Fotografia = c.Fotografias,
+                    Proprietario = c.Proprietario.Nome
                 })
                 .ToListAsync();
 
             return carros;
         }
 
-        // GET: api/CarrosApi/5
+        // GET: api/CarrosAPI/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Carros>> GetCarros(int id)
         {
@@ -58,7 +56,7 @@ namespace jautomulti.Controllers.API
             return carros;
         }
 
-        // PUT: api/CarrosApi/5
+        // PUT: api/CarrosAPI/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCarros(int id, Carros carros)
@@ -89,24 +87,24 @@ namespace jautomulti.Controllers.API
             return NoContent();
         }
 
-        // POST: api/CarrosApi
+        // POST: api/CarrosAPI
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Carros>> PostCarros([FromForm] Carros carro, IFormFile uploadFotoCarro)
         {
-            // Perform data validation and handle file upload here
+            // o anotador [FromForm] informa o ASP .NET que os dados são fornecidos 
+            // em FormData
 
-            // 1. Validate the data
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            /*
+             * TAREFAS A EXECUTAR:
+             * 1. validar os dados
+             * 2. inserir a foto no disco rígido (semelhante ao feito no Veterinário)
+             * 3. usar Try-Catch
+             */
 
-            // 2. Handle file upload
-            if (uploadFotoCarro != null && uploadFotoCarro.Length > 0)
-            {
-                // Save the file to disk or perform any necessary operations
-            }
+
+           // carro.Fotografias = "noVet.jpg";
+
 
             try
             {
@@ -121,7 +119,7 @@ namespace jautomulti.Controllers.API
             return CreatedAtAction("GetCarros", new { id = carro.Id }, carro);
         }
 
-        // DELETE: api/CarrosApi/5
+        // DELETE: api/CarrosAPI/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCarros(int id)
         {

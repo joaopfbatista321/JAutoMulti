@@ -18,7 +18,7 @@ builder.Services
          options.Password.RequireLowercase = true;
          options.Password.RequireUppercase = true;
          options.Password.RequireNonAlphanumeric = false;
-         options.Password.RequiredLength = 8;
+         options.Password.RequiredLength = 6;
          options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
          options.Lockout.MaxFailedAccessAttempts = 5;
      })

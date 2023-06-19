@@ -38,8 +38,18 @@
             @Html.DisplayNameFor(model => model.Carro)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Carro.Id)
+            @Html.DisplayFor(model => model.Carro.Matricula)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ListaProfissionaisNaReparacao)
+        </dt>
+        <dd class="col-sm-10">
+            @foreach (var profissional in Model.ListaProfissionaisNaReparacao)
+            {
+                <div>@Html.DisplayFor(_ => profissional)</div>
+            }
+        </dd>
+
     </dl>
 </div>
 <div>
